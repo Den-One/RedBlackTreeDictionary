@@ -28,17 +28,10 @@ namespace dwt { // doctor web task
 
         TreeNode(const Key key, Value value) : _data(key, value) {}
 
-        TreeNode(const TreeNode<const Key, Value>& rhs) : 
-            _data{ rhs.rhs }, 
-            _color{ rhs._color }, 
-            _parent{ rhs._parent }, 
-            _left{ rhs._left }, 
-            _right{ rhs._right }
-        {
-        }
+        TreeNode(const TreeNode<const Key, Value>& rhs) = delete;
 
         TreeNode(TreeNode<const Key, Value>&& rhs) noexcept :
-            _data{ std::move(rhs.rhs) },
+            _data{ std::move(rhs._data) },
             _color{ rhs._color },
             _parent{ rhs._parent },
             _left{ rhs._left },
@@ -49,37 +42,8 @@ namespace dwt { // doctor web task
             rhs._parent = nullptr;
         }
         
-        TreeNode<Key, Value>& operator=(const TreeNode<const Key, Value>& rhs) {
-            if (this == &rhs) {
-                return *this;
-            }
-
-            delete _parent;
-            delete _left;
-            delete _right;
-            _parent = new TreeNode<const Key, Value>(rhs._parent);
-            _left = new TreeNode<const Key, Value>(rhs._left);
-            _right = new TreeNode<const Key, Value>(rhs._right);
-
-            _color = rhs._color;
-            _data = rhs._data;
-
-            return *this;
-        }
-
-        TreeNode<Key, Value>& operator=(TreeNode<Key, Value>&& rhs) noexcept {
-            if (this == &rhs) {
-                return *this;
-            }
-
-            std::swap(_parent, rhs._parent);
-            std::swap(_left, rhs._left);
-            std::swap(_right, rhs._right);
-            std::swap(_color, rhs._color);
-            std::swap(_data, rhs._data);
-
-            return *this;
-        }
+        TreeNode<const Key, Value>& operator=(const TreeNode<const Key, Value>& rhs) = delete;
+        TreeNode<const Key, Value>& operator=(TreeNode<const Key, Value>&& rhs) = delete;
 
         const Key& key() const {
             return _data.first;

@@ -15,19 +15,16 @@ namespace dwt { // doctor web task
     };
 
     template<typename Key, typename Value>
-    class Map : public Dictionary<Key, Value>, public RedBlackTree<Key, Value> {
+    class Map final : public Dictionary<Key, Value>, public RedBlackTree<Key, Value> {
     public:
         Map() : Dictionary<Key, Value>(), RedBlackTree<Key, Value>() {}
 
         const Value& get(const Key& key) const override {
-            try {
-                auto res = this->find(key);
-                return res->value();
+            auto res = this->find(key);
+            if (res == this->_null) {
+                throw NotFoundKeyException<Key>(key);
             }
-            catch (NotFoundKeyException<int>& e) {
-                std::cout << "Key " << e.getKey() << " isn't found" << std::endl;
-                //throw e;
-            }
+            return res->value();
         }
 
         const Value& operator[](const Key& key) {

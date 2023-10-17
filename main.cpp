@@ -17,10 +17,10 @@ int main() {
     map.set(1, 1);
 
     try {
-        map.get(4);
+        map.get(44);
     }
     catch (dwt::NotFoundKeyException<int>& e) {
-        std::cout << e.getKey() << std::endl;
+        std::cout << "Map doesn't contain the key " << e.getKey() << std::endl;
     }
 
     int valueIn = -5;
