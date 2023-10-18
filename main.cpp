@@ -3,7 +3,7 @@
 #include "Map.hpp"
 
 int main() {
-    dwt::Map<int, int> map;
+    dwt::Map<int, int, std::less<int>> map;
     map.set(1, 1);
     map.set(-2, -2);
     map.set(3, 3);
@@ -15,6 +15,7 @@ int main() {
 #endif
 
     map.set(1, 1);
+    std::cout << map[-2] << std::endl;
 
     try {
         map.get(44);

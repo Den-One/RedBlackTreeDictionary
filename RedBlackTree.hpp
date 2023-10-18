@@ -54,19 +54,43 @@ namespace dwt { // doctor web task
         }
     };
 
-    template<typename Key, typename Value>
+    template<typename Key, typename Value, typename Comp = std::less<Key>>
     class RedBlackTree {
     protected:
         TreeNode<const Key, Value>* _null = nullptr;
         TreeNode<const Key, Value>* _root = nullptr;
 
     private:
+        bool isLess(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return comp(a, b);
+        }
+
+        bool isMore(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return !isLess(a, b);
+        }
+
+        bool isEqual(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return !isLess(a, b) && !isLess(b, a);
+        }
+
+        bool isNotEqual(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return !isEqual(a, b);
+        }
+
+        bool isLessOrEqual(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return isLess(a, b) || isEqual(a, b);
+        }
+
+        bool isMoreOrEqual(const Key& a, const Key& b, Comp comp = Comp{}) const {
+            return isMore(a, b) || isEqual(a, b);
+        }
+
         TreeNode<const Key, Value>* searchTreeHelper(TreeNode<const Key, Value>* node, const Key& key) const {
-            if (node == _null || key == node->_data.first) {
+            if (node == _null || isEqual(key, node->_data.first)) {
                 return node;
             }
 
-            if (key < node->_data.first) {
+            if (isLess(key, node->_data.first)) {
                 return searchTreeHelper(node->_left, key);
             }
             return searchTreeHelper(node->_right, key);
@@ -112,7 +136,7 @@ namespace dwt { // doctor web task
                         brother = node->_parent->_left;
                     }
 
-                    if (brother->_right->_color == Color::BLACK && brother->_right->_color == Color::BLACK) {
+                    if (brother->_right->_color == Color::BLACK) {
                         brother->_color = Color::RED;
                         node = node->_parent;
                     }
@@ -154,11 +178,11 @@ namespace dwt { // doctor web task
             TreeNode<const Key, Value>* y;
 
             while (node != _null) {
-                if (node->_data.first == key) {
+                if (isEqual(node->_data.first, key)) {
                     z = node;
                 }
 
-                if (node->_data.first <= key) {
+                if (isLessOrEqual(node->_data.first, key)) {
                     node = node->_right;
                 }
                 else {

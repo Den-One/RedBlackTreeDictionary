@@ -14,8 +14,8 @@ namespace dwt { // doctor web task
         virtual bool isSet(const Key& key) const = 0;
     };
 
-    template<typename Key, typename Value>
-    class Map final : public Dictionary<Key, Value>, public RedBlackTree<Key, Value> {
+    template<typename Key, typename Value, typename Comp = std::less<Key>>
+    class Map final : public Dictionary<Key, Value>, public RedBlackTree<Key, Value, Comp> {
     public:
         Map() : Dictionary<Key, Value>(), RedBlackTree<Key, Value>() {}
 
